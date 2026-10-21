@@ -11,7 +11,8 @@ public class FPController : MonoBehaviour
 
     [Header("Look Settings")]
     public Transform cameraTransform;
-    public float lookSensitivity = 2f;
+    public float mouseSensitivity = 0.1f;    // NEW: degrees per pixel the mouse moves
+    public float stickSensitivity = 150f;    // NEW: degrees per second at full stick tilt
     public float verticalLookLimit = 90f;
 
     private CharacterController controller;
@@ -20,6 +21,7 @@ public class FPController : MonoBehaviour
     private Vector3 velocity;
     private float verticalRotation = 0f;
     private bool isSprinting = false;
+    private bool lookFromGamepad = false;    // NEW: was the last look input from a controller?
 
     private void Awake()
     {
@@ -42,6 +44,7 @@ public class FPController : MonoBehaviour
     public void OnLook(InputAction.CallbackContext context)
     {
         lookInput = context.ReadValue<Vector2>();
+        lookFromGamepad = context.control.device is Gamepad;   // NEW: remember the device
     }
 
     public void OnSprint(InputAction.CallbackContext context)
@@ -75,13 +78,17 @@ public class FPController : MonoBehaviour
 
     public void HandleLook()
     {
-        float mouseX = lookInput.x * lookSensitivity;
-        float mouseY = lookInput.y * lookSensitivity;
+        // CHANGED: mouse = distance moved this frame (no deltaTime)
+        //          stick = how far it's pushed (scale by deltaTime so it's the same on every PC)
+        float sensitivity = lookFromGamepad ? stickSensitivity * Time.deltaTime : mouseSensitivity;
 
-        verticalRotation -= mouseY;
+        float lookX = lookInput.x * sensitivity;
+        float lookY = lookInput.y * sensitivity;
+
+        verticalRotation -= lookY;
         verticalRotation = Mathf.Clamp(verticalRotation, -verticalLookLimit, verticalLookLimit);
         cameraTransform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
 
-        transform.Rotate(Vector3.up * mouseX);
+        transform.Rotate(Vector3.up * lookX);
     }
 }
