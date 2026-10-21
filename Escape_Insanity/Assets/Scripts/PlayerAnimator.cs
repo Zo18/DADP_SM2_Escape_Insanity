@@ -1,37 +1,40 @@
 using UnityEngine;
 
 // Plays the walk animation only while the player is moving.
-// When standing still it either freezes mid-step, or resets to a neutral pose.
 // While hiding, it plays the idle animation instead.
 public class PlayerAnimator : MonoBehaviour
 {
-    public CharacterController controller;   // on Player
     public Animator animator;                // on PC_Patient
     public float walkSpeed = 5f;             // match FPController's Move Speed
     public bool resetToStandingPose = true;  // on = neutral pose, off = freeze mid-step
 
+    Vector3 lastPos;
     bool wasMoving;
     bool isHiding;
 
+    void Start()
+    {
+        lastPos = transform.position;
+    }
+
     void Update()
     {
-        if (isHiding) return;                  // while hiding, Idle plays and walking logic is off
+        if (isHiding) return;
 
-        Vector3 velocity = controller.velocity;
-        velocity.y = 0f;                       // ignore falling and jumping
-        float speed = velocity.magnitude;
+        Vector3 delta = transform.position - lastPos;
+        delta.y = 0f;                                   // ignore falling
+        float speed = delta.magnitude / Time.deltaTime; // real speed this frame
+        lastPos = transform.position;
+
         bool moving = speed > 0.1f;
 
         if (moving)
-        {
-            animator.speed = speed / walkSpeed;   // faster when sprinting
-        }
+            animator.speed = speed / walkSpeed;
         else
         {
-            animator.speed = 0f;                  // pause the animation
-
+            animator.speed = 0f;
             if (resetToStandingPose && wasMoving)
-                animator.Play("PC_Walk", 0, 0f);  // back to the first frame
+                animator.Play("PC_Walk", 0, 0f);
         }
 
         wasMoving = moving;
