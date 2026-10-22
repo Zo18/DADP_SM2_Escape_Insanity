@@ -1,11 +1,13 @@
 using UnityEngine;
 
+// Put on each Paper Stack. Holds the story text shown when picked up.
 public class FilePickup : MonoBehaviour
 {
-    void OnTriggerEnter(Collider other)
+    [TextArea(3, 6)] public string noteText = "Patient 07 - Day 41. Dosage increased again...";
+
+    public void PickUp()
     {
-        if (!other.CompareTag("Player")) return;
-        GameManager.I.Collect();
+        GameManager.Instance.CollectFile(noteText);
         Destroy(gameObject);
     }
 }
