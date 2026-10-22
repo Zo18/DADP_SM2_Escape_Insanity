@@ -5,12 +5,13 @@ using UnityEngine.InputSystem;
 public class PlayerInteract : MonoBehaviour
 {
     public Camera cam;
-    public float reach = 2.5f;
+    public float reach = 3f;
+    public float aimRadius = 0.3f; // bigger = easier to target
 
     void Update()
     {
         FilePickup target = null;
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, reach))
+        if (Physics.SphereCast(cam.transform.position, aimRadius, cam.transform.forward, out RaycastHit hit, reach))
             target = hit.collider.GetComponentInParent<FilePickup>();
 
         GameManager.Instance.ShowPrompt(target != null);
