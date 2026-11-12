@@ -50,10 +50,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7795446306458191292, guid: d8c446ae26f308342a8df652dc878577, type: 3}
       propertyPath: m_Name
-      value: Room_Cell
+      value: Room_Cell_BrokenDoor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: -3114786165532395, guid: d8c446ae26f308342a8df652dc878577, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d8c446ae26f308342a8df652dc878577, type: 3}
