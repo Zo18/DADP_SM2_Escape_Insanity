@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &6525157759130144441
+--- !u!1001 &7534303156543627180
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -50,10 +50,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7795446306458191292, guid: d8c446ae26f308342a8df652dc878577, type: 3}
       propertyPath: m_Name
-      value: Room_Cell
+      value: Room_Cell_Scratched
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1792049144975751256, guid: d8c446ae26f308342a8df652dc878577, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d8c446ae26f308342a8df652dc878577, type: 3}
