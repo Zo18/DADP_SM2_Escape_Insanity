@@ -1,7 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// Looks where the camera points; press E to use whatever is there.
+// Combined version: works with Zoe's file pickups AND Lilly's Interactables
+// (fuses, fuse box, keycard, card reader, exit door).
+// Look at something and press E (or X / Square on a controller) to use it.
 public class PlayerInteract : MonoBehaviour
 {
     public Camera cam;
@@ -10,13 +12,23 @@ public class PlayerInteract : MonoBehaviour
 
     void Update()
     {
-        FilePickup target = null;
+        FilePickup file = null;
+        Interactable thing = null;
+
         if (Physics.SphereCast(cam.transform.position, aimRadius, cam.transform.forward, out RaycastHit hit, reach))
-            target = hit.collider.GetComponentInParent<FilePickup>();
+        {
+            file = hit.collider.GetComponentInParent<FilePickup>();
+            thing = hit.collider.GetComponentInParent<Interactable>();
+        }
 
-        GameManager.Instance.ShowPrompt(target != null);
+        bool hasTarget = file != null || thing != null;
+        if (GameManager.Instance != null) GameManager.Instance.ShowPrompt(hasTarget);
 
-        if (target != null && Keyboard.current.eKey.wasPressedThisFrame)
-            target.PickUp();
+        bool pressed = (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
+                    || (Gamepad.current != null && Gamepad.current.buttonWest.wasPressedThisFrame);
+
+        if (!pressed) return;
+        if (file != null) file.PickUp();
+        else if (thing != null) thing.Interact();
     }
 }
