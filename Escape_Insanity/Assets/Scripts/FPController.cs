@@ -23,6 +23,8 @@ public class FPController : MonoBehaviour
     private bool isSprinting = false;
     private bool lookFromGamepad = false;    // NEW: was the last look input from a controller?
 
+    public bool IsSprinting => isSprinting;
+
     private void Awake()
     {
         controller = GetComponent<CharacterController>();

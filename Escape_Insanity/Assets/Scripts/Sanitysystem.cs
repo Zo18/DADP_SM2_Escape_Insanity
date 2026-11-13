@@ -9,12 +9,12 @@ public class SanitySystem : MonoBehaviour
     public float currentSanity;
     public float drainRatePerSecond = 8f;
     public float regenRatePerSecond = 4f;
+    public FPController playerMovement;
 
-    // NOTE: Once Person A's FPController exists on this branch,
-    // add this back in and swap IsSprintingNow() to use it:
-    // public FPController playerMovement;
+    private bool hasLost;
+    public bool HasLost => hasLost;
 
-    [Header("Temporary Input (remove once real sprint exists)")]
+    [Header("Fallback Sprint Input")]
     public InputAction tempSprintAction;
 
     [Header("Vision Feedback (optional, wire up later)")]
@@ -22,6 +22,7 @@ public class SanitySystem : MonoBehaviour
 
     private bool IsSprintingNow()
     {
+        if (playerMovement != null) return playerMovement.IsSprinting;
         return tempSprintAction != null && tempSprintAction.IsPressed();
     }
 
@@ -42,6 +43,8 @@ public class SanitySystem : MonoBehaviour
 
     private void Update()
     {
+        if (hasLost) return;
+
         if (IsSprintingNow())
         {
             currentSanity -= drainRatePerSecond * Time.deltaTime;
@@ -52,6 +55,11 @@ public class SanitySystem : MonoBehaviour
         }
 
         currentSanity = Mathf.Clamp(currentSanity, 0f, maxSanity);
+        if (currentSanity <= 0f)
+        {
+            currentSanity = 0f;
+            hasLost = true;
+        }
 
         UpdateVisionFeedback();
     }
