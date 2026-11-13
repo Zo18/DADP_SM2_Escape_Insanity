@@ -4863,13 +4863,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e56c7610ebb00848b36387c73be2b4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  filesNeeded: 3
-  fileCounter: {fileID: 334902993}
-  objectiveText: {fileID: 2114512495}
-  interactPrompt: {fileID: 1635298035}
-  notePanel: {fileID: 1492786182}
-  noteText: {fileID: 517495220}
-  winPanel: {fileID: 1025855230}
+  hudText: {fileID: 0}
+  exitBarrier: {fileID: 0}
+  fusesNeeded: 3
+  hasKeycard: 0
+  cardReaderDone: 0
+  fuseBoxDone: 0
 --- !u!1 &1055754312
 GameObject:
   m_ObjectHideFlags: 0
@@ -7242,13 +7241,14 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 270d239ca949e5648a22575422f55d34, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ObjectiveManager
-  hudText: {fileID: 2114512495}
-  exitBarrier: {fileID: 1765967297}
-  fusesNeeded: 3
-  hasKeycard: 0
-  cardReaderDone: 0
-  fuseBoxDone: 0
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  filesNeeded: 3
+  fileCounter: {fileID: 334902993}
+  objectiveText: {fileID: 2114512495}
+  interactPrompt: {fileID: 1635298035}
+  notePanel: {fileID: 1492786182}
+  noteText: {fileID: 517495220}
+  winPanel: {fileID: 1025855230}
 --- !u!1 &1550152375 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 17fb77216f9018a47b8ba57b586a64c3, type: 3}

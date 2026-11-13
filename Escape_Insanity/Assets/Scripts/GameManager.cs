@@ -1,51 +1,69 @@
 using UnityEngine;
 using TMPro;
 
-// Escape objective: 3 fuses -> fuse box -> keycard -> card reader -> exit opens.
-// Creates itself if missing. If Hud Text is empty, uses the GameManager's objective text.
-public class ObjectiveManager : MonoBehaviour
+// Tracks files, updates the HUD, shows notes, and opens the exit.
+public class GameManager : MonoBehaviour
 {
-    static ObjectiveManager instance;
-    public static ObjectiveManager I
+    public static GameManager Instance;
+
+    public int filesNeeded = 3;
+    public TMP_Text fileCounter;     // "Files 0/3"
+    public TMP_Text objectiveText;   // what to do next
+    public GameObject interactPrompt;// "Press E"
+    public GameObject notePanel;     // panel with the note
+    public TMP_Text noteText;
+    public GameObject winPanel;
+
+    int files;
+    public bool AllFilesFound => files >= filesNeeded;
+
+    void Awake() { Instance = this; }
+
+    void Start()
     {
-        get
-        {
-            if (instance == null) instance = FindFirstObjectByType<ObjectiveManager>();
-            if (instance == null) instance = new GameObject("ObjectiveManager").AddComponent<ObjectiveManager>();
-            return instance;
-        }
+        notePanel.SetActive(false);
+        winPanel.SetActive(false);
+        interactPrompt.SetActive(false);
+        UpdateHUD();
     }
 
-    public TMP_Text hudText;
-    public GameObject exitBarrier;   // the black block at the exit; hidden when the card reader is used
-    public int fusesNeeded = 3;
-    public bool hasKeycard, cardReaderDone, fuseBoxDone;
-    int fuses;
-
-    void Awake() { instance = this; }
-    void Start() { Refresh(); }
-
-    public void GotFuse() { fuses++; Refresh(); }
-    public void UseFuseBox() { fuseBoxDone = true; Refresh(); }
-    public void GotKeycard() { hasKeycard = true; Refresh(); }
-    public void UseCardReader()
+    void Update()
     {
-        cardReaderDone = true;
-        if (exitBarrier) exitBarrier.SetActive(false);
-        Refresh();
+        // close the note with E or Escape
+        if (notePanel.activeSelf && UnityEngine.InputSystem.Keyboard.current.escapeKey.wasPressedThisFrame)
+            notePanel.SetActive(false);
     }
-    public bool FusesComplete => fuses >= fusesNeeded;
 
-    public void Refresh()
+    public void ShowPrompt(bool show) { interactPrompt.SetActive(show && !notePanel.activeSelf); }
+
+    public void CollectFile(string text)
     {
-        TMP_Text t = hudText;
-        if (t == null && GameManager.Instance != null) t = GameManager.Instance.objectiveText;
-        if (t == null) return;
+        files++;
+        noteText.text = text;
+        notePanel.SetActive(true);
+        CancelInvoke(nameof(HideNote));
+        Invoke(nameof(HideNote), 5f);   // note disappears after 5 seconds
+        UpdateHUD();
+    }
 
-        if (!FusesComplete) t.text = "Find the fuses (" + fuses + "/" + fusesNeeded + ")";
-        else if (!fuseBoxDone) t.text = "Put the fuses in the fuse box";
-        else if (!hasKeycard) t.text = "Find the keycard";
-        else if (!cardReaderDone) t.text = "Use the keycard on the card reader";
-        else t.text = "The exit is open - escape!";
+    void HideNote() { notePanel.SetActive(false); }
+
+    void UpdateHUD()
+    {
+        fileCounter.text = "Files " + files + "/" + filesNeeded;
+        objectiveText.text = AllFilesFound
+            ? "Get back to reception and escape"
+            : "Find the patient files";
+
+        // The escape objective (ObjectiveManager) owns the objective line.
+        ObjectiveManager.I.Refresh();
+    }
+
+    public void Win()
+    {
+        winPanel.SetActive(true);
+        Time.timeScale = 0f;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 }
