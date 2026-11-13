@@ -1087,11 +1087,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!20 &416727281 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 4464148061622753011, guid: a5c59263509ff53428de02ba11b9de84, type: 3}
-  m_PrefabInstance: {fileID: 3826248708553805446}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &519648578
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4534,8 +4529,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92ac00a5304d102488da273949f2ef6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteract
-  cam: {fileID: 416727281}
-  range: 3
 --- !u!1001 &938309732959156298
 PrefabInstance:
   m_ObjectHideFlags: 0
